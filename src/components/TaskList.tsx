@@ -2,15 +2,26 @@ import { ReactNode, useState } from "react";
 
 interface Props {
   tasks: string[];
-  // onEditTask: () => void;
+  inputChangedHandler: (e: any) => void;
+  deleteTask: (e: any) => void;
 }
-const TaskList = ({ tasks }: Props) => {
+const TaskList = ({ tasks, inputChangedHandler, deleteTask }: Props) => {
   const [editInput, setEditInput] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(tasks);
+  const [editableIndex, setEditableindex] = useState(0);
 
-  const inputChangedHandler = (i: any, e: any) => {
-    e.preventDefault();
-    setInputValue(e.target.value);
+  const onEditableOff = (e: any) => {
+    if (e.key === "Enter") {
+      let index = e.target.getAttribute("data-key");
+      setEditableindex(index);
+      setEditInput(false);
+    }
+  };
+
+  const onEdtableOn = (e: any) => {
+    let index = e.target.getAttribute("data-key");
+    setEditableindex(index);
+    setEditInput(true);
   };
 
   return (
@@ -20,22 +31,18 @@ const TaskList = ({ tasks }: Props) => {
         {tasks.map((task, index) => (
           <li className="list-group-item" key={index}>
             <div
-              key={index}
+              data-key={index}
               className="d-inline-block col-md-9"
-              onDoubleClick={() => setEditInput(true)}
+              onDoubleClick={onEdtableOn}
             >
-              {editInput ? (
+              {editInput && editableIndex == index ? (
                 <input
+                  data-key={index}
                   type="text"
                   className="form-control"
                   defaultValue={task}
-                  onChange={(event) => inputChangedHandler(index, event)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      //setInputValue(event.target.value);
-                      setEditInput(false);
-                    }
-                  }}
+                  onChange={inputChangedHandler}
+                  onKeyDown={onEditableOff}
                 />
               ) : inputValue.length > 0 ? (
                 inputValue
@@ -43,11 +50,14 @@ const TaskList = ({ tasks }: Props) => {
                 task
               )}
             </div>
-            <div className="d-inline-block col-md-3">
-              <button type="button" className="btn btn-danger float-end btn-sm">
-                <i className="bi bi-trash"></i>
-              </button>
-            </div>
+            <button
+              data-key={index}
+              onClick={deleteTask}
+              type="button"
+              className="btn btn-danger float-end btn-sm d-inline-block"
+            >
+              <i data-key={index} className="bi bi-trash"></i>
+            </button>
           </li>
         ))}
       </ul>

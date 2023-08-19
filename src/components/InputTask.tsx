@@ -5,13 +5,11 @@ interface Props {
   heading: string;
 }
 const InputTask = ({ heading }: Props) => {
-  const [selectInput, setSelectInput] = useState<string[]>([]);
+  //const [selectInput, setSelectInput] = useState<string[]>([]);
   const [updatedInput, setUpdatedInput] = useState<string[]>([]);
-  const [editInput, setEditInput] = useState(false);
-
-  const handleChange = (event: any) => {
-    setSelectInput(event.target.value);
-  };
+  // const handleChange = (event: any) => {
+  //   setSelectInput(event.target.value);
+  // };
 
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
@@ -20,6 +18,21 @@ const InputTask = ({ heading }: Props) => {
         event.target.value,
       ]);
     }
+  };
+
+  const inputChangedHandler = (e: any) => {
+    e.preventDefault();
+    let index = e.target.getAttribute("data-key");
+    updatedInput[index] = e.target.value;
+    setUpdatedInput(updatedInput);
+  };
+
+  const deleteTask = (e: any) => {
+    e.preventDefault();
+    let index = e.target.getAttribute("data-key");
+    let tempState = [...updatedInput];
+    tempState.splice(index, 1);
+    setUpdatedInput(tempState);
   };
 
   return (
@@ -35,8 +48,12 @@ const InputTask = ({ heading }: Props) => {
           onKeyDown={handleKeyDown}
         />
       </div>
-
-      <TaskList tasks={updatedInput} />
+      {console.log(updatedInput)}
+      <TaskList
+        tasks={updatedInput}
+        inputChangedHandler={inputChangedHandler}
+        deleteTask={deleteTask}
+      />
     </>
   );
 };
