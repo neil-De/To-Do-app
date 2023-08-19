@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import InputTask from "./components/InputTask";
 
 function App() {

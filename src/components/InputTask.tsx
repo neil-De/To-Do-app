@@ -1,15 +1,12 @@
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import TaskList from "./TaskList";
 
 interface Props {
   heading: string;
 }
 const InputTask = ({ heading }: Props) => {
-  //const [selectInput, setSelectInput] = useState<string[]>([]);
   const [updatedInput, setUpdatedInput] = useState<string[]>([]);
-  // const handleChange = (event: any) => {
-  //   setSelectInput(event.target.value);
-  // };
+  const [defaultValue, setDefaultValue] = useState("");
 
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
@@ -17,7 +14,12 @@ const InputTask = ({ heading }: Props) => {
         ...prevselectInput,
         event.target.value,
       ]);
+      setDefaultValue(" ");
     }
+  };
+
+  const handeWhilteEdit = (event: any) => {
+    setDefaultValue(event.target.value);
   };
 
   const inputChangedHandler = (e: any) => {
@@ -44,11 +46,12 @@ const InputTask = ({ heading }: Props) => {
           className="form-control"
           placeholder="Add Task"
           aria-label="Add Task"
+          onChange={handeWhilteEdit}
+          value={defaultValue}
           aria-describedby="addon-wrapping"
           onKeyDown={handleKeyDown}
         />
       </div>
-      {console.log(updatedInput)}
       <TaskList
         tasks={updatedInput}
         inputChangedHandler={inputChangedHandler}
