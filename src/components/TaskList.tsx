@@ -15,7 +15,7 @@ const TaskList = ({ tasks }: Props) => {
 
   return (
     <>
-      {tasks.length === 0 && <h4>No Add Task Added</h4>}
+      {tasks.length === 0 && <h4>No Task Added</h4>}
       <ul className="list-group">
         {tasks.map((task, index) => (
           <li className="list-group-item" key={index}>
